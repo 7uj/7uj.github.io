@@ -1,0 +1,50 @@
+    <script src="js/aes.js"></script>
+    <!-- 加密时需引入 pad-zeropadding.js -->
+    <script src="js/pad-zeropadding.js"></script>
+    
+    
+    
+        <form action="#" method="post" id="loginForm" >
+            用户名：<input type="text" name="username"><br>
+            密  码：<input type="password" name="pazzword" id="pazzword"><br>
+            <button type="button" onclick="checkForm()">提交</button>
+        </form>
+
+
+<script type="text/javascript">
+    function checkForm(){
+        var key = "0000000671595991";
+        var iv = "tdrdadq59tbss5n7";
+        var pazzword = $("#pazzword").val();
+ 
+        // aes 加密
+        pazzword = encrypt(pazzword,key,iv);
+        $("#pazzword").val(pazzword);
+        if(pazzword.length == 24){
+            alert(pazzword + "解密后：" + decrypt(pazzword,key,iv));
+            $("#loginForm").submit();
+        }
+    }
+ 
+    // 加密
+    function encrypt(data,key,iv) { //key,iv：16位的字符串
+        var key1  = CryptoJS.enc.Latin1.parse(key);
+        var iv1   = CryptoJS.enc.Latin1.parse(iv);
+        return CryptoJS.AES.encrypt(data, key1,{
+            iv : iv1,
+            mode : CryptoJS.mode.CBC,
+            padding : CryptoJS.pad.ZeroPadding
+        }).toString();
+    }
+    // 解密
+    function decrypt(data,key,iv){ //key,iv：16位的字符串
+        var key1  = CryptoJS.enc.Latin1.parse(key);
+        var iv1   = CryptoJS.enc.Latin1.parse(iv);
+        var decrypted=CryptoJS.AES.decrypt(data,key1,{
+            iv : iv1,
+            mode : CryptoJS.mode.CBC,
+            padding : CryptoJS.pad.ZeroPadding
+        });
+        return decrypted.toString(CryptoJS.enc.Utf8);
+    }
+</script>
